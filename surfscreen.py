@@ -1,9 +1,8 @@
-
 # python 3
 
 import urllib.request
 from datetime import datetime, timedelta
-import sched, time
+from time import sleep
 
 dir = "/home/pi/GrabbySurf/"
 url_root = "http://www.transport.wa.gov.au/imarine/coastaldata/coastcam/archivegfx/"
@@ -14,11 +13,7 @@ def get_datetime():	# returns time in the format "0000"
 	date = str(now.year)[-2:] + str(now.month).zfill(2) + str(now.day).zfill(2)
 	return date, time
 
-
-
-s = sched.scheduler(time.time, time.sleep) # instantiate a scheduler
-
-def get_pics(sc): 
+def get_pics(): 
 	print(get_datetime()[1]) # print the time
 	getfile = get_datetime()[1] + ".jpg"
 	savefile = get_datetime()[0] + get_datetime()[1] + ".jpg"
@@ -26,9 +21,13 @@ def get_pics(sc):
 	urllib.request.urlretrieve(url_root + "camtrigg1/" + getfile, dir + "camtrigg1/" + savefile)
 	urllib.request.urlretrieve(url_root + "camlancelin/" +  getfile, dir + "camlancelin/" + savefile)
 	urllib.request.urlretrieve(url_root + "camgeraldton/" + getfile, dir + "camgeraldton/" + savefile)
-	s.enter(55, 1, get_pics, (sc,)) # remaining events, schedule a grab every 55s, priority 1
 
-s.enter(1, 1, get_pics, (s,)) # first event
-s.run()
+while True:
+	if int(get_datetime()[1][:2]) > 4 and int(get_datetime()[1][:2]) < 9:  # get between 4am and 9pm
+		get_pics()
+		sleep(55)
+	else:
+		print("Sleeping") 
+		sleep(55)
 
 # filecmp to compare files, delete if identical and get missing image
