@@ -5,33 +5,24 @@ from datetime import datetime, timedelta
 import sched, time
 
 dir = "/home/pi/GrabbySurf/"
-#print('here we go')
+url_root = "http://www.transport.wa.gov.au/imarine/coastaldata/coastcam/archivegfx/"
 
-def get_time():	# returns time in the format "0000"
-	now = datetime.now() + timedelta(hours = 8) - timedelta(minutes = 5)
-
-	if now.hour < 10:
-		hr_str = "0" + str(now.hour)
-	else:
-		hr_str = str(now.hour)
-
-	if now.minute < 10:
-		min_str = "0" + str(now.minute)
-	else:
-		min_str = str(now.minute)
-
-	time = hr_str + min_str
-	return time
+def get_datetime():	# returns time in the format "0000"
+	now = datetime.utcnow() + timedelta(hours = 8) - timedelta(minutes = 5)
+	time = str(now.hour).zfill(2) + str(now.minute).zfill(2)
+	date = str(now.year)[-2:] + str(now.month).zfill(2) + str(now.day).zfill(2)
+	return date, time
 
 #def cam_get(str camswan)
 
-s = sched.scheduler(time.time, time.sleep)
+s = sched.scheduler(time.time, time.sleep) # instantiate a scheduler
 
 def get_pics(sc): 
-	print(get_time())
-	filename = get_time()
-	urllib.request.urlretrieve("http://www.transport.wa.gov.au/imarine/coastaldata/coastcam/archivegfx/camswan/"+filename+".jpg", dir+"camswan/"+filename+".jpg")
-	s.enter(45, 1, get_pics, (sc,)) # schedule a grab every 45s
+	print(get_datetime()[1]) # print the time
+	getfile = get_datetime()[1] + ".jpg"
+	savefile = get_datetime()[0] + get_datetime()[1] + ".jpg"
+	urllib.request.urlretrieve(url_root + "camswan/" + getfile, dir + "camswan/" + savefile)
+	s.enter(2, 1, get_pics, (sc,)) # remaining events, schedule a grab every 45s, priority 1
 
-s.enter(45, 1, get_pics, (s,))
+s.enter(1, 1, get_pics, (s,)) # first event
 s.run()
