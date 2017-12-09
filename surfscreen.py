@@ -1,3 +1,4 @@
+
 # python 3
 
 import urllib.request
@@ -13,7 +14,7 @@ def get_datetime():	# returns time in the format "0000"
 	date = str(now.year)[-2:] + str(now.month).zfill(2) + str(now.day).zfill(2)
 	return date, time
 
-#def cam_get(str camswan)
+
 
 s = sched.scheduler(time.time, time.sleep) # instantiate a scheduler
 
@@ -22,7 +23,12 @@ def get_pics(sc):
 	getfile = get_datetime()[1] + ".jpg"
 	savefile = get_datetime()[0] + get_datetime()[1] + ".jpg"
 	urllib.request.urlretrieve(url_root + "camswan/" + getfile, dir + "camswan/" + savefile)
-	s.enter(2, 1, get_pics, (sc,)) # remaining events, schedule a grab every 45s, priority 1
+	urllib.request.urlretrieve(url_root + "camtrigg1/" + getfile, dir + "camtrigg1/" + savefile)
+	urllib.request.urlretrieve(url_root + "camlancelin/" +  getfile, dir + "camlancelin/" + savefile)
+	urllib.request.urlretrieve(url_root + "camgeraldton/" + getfile, dir + "camgeraldton/" + savefile)
+	s.enter(55, 1, get_pics, (sc,)) # remaining events, schedule a grab every 55s, priority 1
 
 s.enter(1, 1, get_pics, (s,)) # first event
 s.run()
+
+# filecmp to compare files, delete if identical and get missing image
