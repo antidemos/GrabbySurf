@@ -23,7 +23,7 @@ def get_pics():
 	urllib.request.urlretrieve(url_root + "camgeraldton/" + getfile, dir + "camgeraldton/" + savefile)
 
 while True:
-	if int(get_datetime()[1][:2]) > 4 and int(get_datetime()[1][:2]) < 9:  # get between 4am and 9pm
+	if int(get_datetime()[1][:2]) > 3 and int(get_datetime()[1][:2]) < 21:  # get between 4am and 9pm
 		get_pics()
 		sleep(55)
 	else:
