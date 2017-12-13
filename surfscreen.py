@@ -1,3 +1,4 @@
+
 # python 3
 
 import urllib.request
@@ -23,11 +24,17 @@ def get_pics():
 	urllib.request.urlretrieve(url_root + "camgeraldton/" + getfile, dir + "camgeraldton/" + savefile)
 
 while True:
-	if int(get_datetime()[1][:2]) > 3 and int(get_datetime()[1][:2]) < 21:  # get between 4am and 9pm
-		get_pics()
-		sleep(55)
-	else:
-		print("Sleeping") 
-		sleep(55)
+	try:
+		if int(get_datetime()[1][:2]) > 3 and int(get_datetime()[1][:2]) < 21:  # get between 4am and 9pm
+			get_pics()
+			sleep(55)
+		else:
+			print("Sleeping") 
+			sleep(55)
+	except (urllib.error.URLError):
+		print("URLError")
+	except (OSError):
+		print("OSError")
+		pass
 
 # filecmp to compare files, delete if identical and get missing image
