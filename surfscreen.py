@@ -1,11 +1,13 @@
 
+
 # python 3
 
 import urllib.request
 from datetime import datetime, timedelta
 from time import sleep
 
-dir = "/home/pi/GrabbySurf/"
+#dir = "/home/pi/GrabbySurf/" # for raspberry pi
+dir = "/root/GrabbySurf/"
 url_root = "http://www.transport.wa.gov.au/imarine/coastaldata/coastcam/archivegfx/"
 
 def get_datetime():	# returns time in the format "0000"
