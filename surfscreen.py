@@ -3,15 +3,17 @@
 # python 3
 
 import urllib.request
-from datetime import datetime, timedelta
+import datetime, pytz
 from time import sleep
+
 
 #dir = "/home/pi/GrabbySurf/" # for raspberry pi
 dir = "/root/GrabbySurf/"
 url_root = "http://www.transport.wa.gov.au/imarine/coastaldata/coastcam/archivegfx/"
 
 def get_datetime():	# returns time in the format "0000"
-	now = datetime.utcnow() + timedelta(hours = 8) - timedelta(minutes = 5)
+	tz = pytz.timezone('Australia/West')
+	now = datetime.datetime.now(tz=tz) - datetime.timedelta(minutes = 5)
 	time = str(now.hour).zfill(2) + str(now.minute).zfill(2)
 	date = str(now.year)[-2:] + str(now.month).zfill(2) + str(now.day).zfill(2)
 	return date, time
